@@ -3,7 +3,7 @@ var express = require('express');
 var http = require('http');
 var app = express();
 var db = require('./config/db');
-var _dog = require('./model/dog');
+var dogs = require('./controllers/dogs');
 var dbVerify = mongoose.connection;
 
 dbVerify.once('open',function(){
@@ -20,51 +20,24 @@ http.createServer(function(req,res){
 	var url = req.url;
 
 	switch(url){
-
 		case '/retrieve':
-			_dog.find(function (err, data) {
-			  if (err){
-			  	return res.end(err);
-			  }; 
-			  res.end(JSON.stringify(data));
-			});
+			dogs.retrieve(req,res);
 			break;
 
 		case '/create':
-			var dogLeo = {
-				name : 'Leonardo',
-				price : 50.0,
-				brood : 'Bassehound',
-			};
-
-			var dogzin = new _dog(dogLeo);
-
-			dogzin.save(function (err, data) {
-			  if (err){
-			  	return res.end(err);
-			  }; 
-			  res.end('Dog criado -> '+JSON.stringify(data));
-			});
+			dogs.create(req,res);
 			break;
 
 		case '/update':
-			_dog.findOne(function (err, data) {
-			  if (err){
-			  	return res.end(err);
-			  }; 
+			dogs.update(req,res);
+			break;
 
-			  // data.name='caio';
-			  res.end(JSON.stringify(data))
-
-			 //  data.save(function (err, data) {
-				//   if (err){
-				//   	return res.end(err);
-				//   }; 
-				//   res.end(JSON.stringify(data));
-				// });
-			  
-			});
-
+		case '/remove':
+			dogs.remove(req,res);
+			break;
+			
+		case '/removeOne':
+			dogs.removeOne(req,res);
 			break;
 		default:
 			res.end('URL desconhecida! -> '+ url);
