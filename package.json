@@ -1,8 +1,13 @@
 {
   "name": "MEANCrud",
   "version": "0.0.1",
-  "description": "crud MEAN para prática do curso",
+  "description": "a simple crud MEAN",
   "main": "app.js",
+  "dependencies": {
+    "express": "^4.5.1",
+    "mongoose": "^3.8.12"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +18,7 @@
   "keywords": [
     "MEAN"
   ],
-  "author": "Caio",
+  "author": "Caio Mariano",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/caionitro/MEANCrud/issues"
