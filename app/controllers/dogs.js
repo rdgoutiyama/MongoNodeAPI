@@ -3,19 +3,13 @@ var Dog = require('../model/dog');
 module.exports = {
 
 	create : function(req,res){
-		var dogLeo = {
-			name : 'Leonardo',
-			price : 50.0,
-			brood : 'Bassehound',
-		};
-
-		var dogzin = new Dog(dogLeo);
+		var dogzin = new Dog(req.body);
 
 		dogzin.save(function (err, data) {
 		  if (err){
 		  	return res.end(err);
 		  }; 
-		  res.end('Dog criado -> '+JSON.stringify(data));
+		  res.json(data);
 		});
 	},
 
@@ -24,20 +18,20 @@ module.exports = {
 			if (err){
 				return res.end(err);
 			}; 
-			res.end(JSON.stringify(data));
+			res.json(data);
 		});
 	},
 
 	update : function(req,res){
-		var query = {"_id":"53becf473083c11c25b7c129"};
+		var query = {"_id" : req.params.id};
 
-		var mod = {'name' : 'Lingui'};
+		var mod = req.body;
 
 		Dog.update(query,mod,function (err, data) {
 		  if (err){
 		  	return res.end(err);
 		  }; 
-		  res.end('Dog alterado -> '+JSON.stringify(data));
+		  res.json(data);
 		});
 	},
 
@@ -46,13 +40,14 @@ module.exports = {
 			if (err){
 				return res.end(err);
 			}; 
-			res.end('Dogs removidos -> '+JSON.stringify(data));
+			res.json(data);
 		});
 	},
 
 	removeOne : function(req,res){
-		Dog.find({'name':'Lingui'}).remove(function(err,data){
-			res.end('Dog removido -> '+JSON.stringify(data));
+		var mod = req.params.body;
+		Dog.find(mod).remove(function(err,data){
+			res.json(data);
 		}).exec();
 	}
 };

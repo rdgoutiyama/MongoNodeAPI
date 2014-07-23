@@ -6,6 +6,7 @@ var methodOverride = require('method-override');
 var app = express();
 var db = require('./app/config/db');
 var api = {};
+var bodyParser = require('body-parser');
 
 api.dog = require('./app/routes/dog');
 var dbVerify = mongoose.connection;
@@ -18,12 +19,14 @@ dbVerify.once('open',function(){
 
 mongoose.connect(db.url);
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(express.static(path.join(__dirname, 'public')));
-// override with different headers; last one takes precedence
-app.use(methodOverride('X-HTTP-Method'));          // Microsoft
-app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
-app.use(methodOverride('X-Method-Override'));      // IBM
-app.use(logger('dev'));      // IBM
+app.use(methodOverride('X-HTTP-Method'));          
+app.use(methodOverride('X-HTTP-Method-Override')); 
+app.use(methodOverride('X-Method-Override'));      
+app.use(logger('dev')); 
 
 app.use('/api/dog',api.dog);
 

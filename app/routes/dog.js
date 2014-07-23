@@ -7,4 +7,12 @@ router.get('/', function(req, res) {
   _dog.retrieve(req,res);
 });
 
+router.post('/', function(req, res) {
+  _dog.create(req,res);
+});
+
+router.put('/:id', function(req, res) {
+  _dog.update(req,res);
+});
+
 module.exports = router;
