@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
 var express = require('express');
-var http = require('http');
+var logger = require('morgan');
+var path = require('path');
+var methodOverride = require('method-override');
 var app = express();
-var db = require('./config/db');
-var dogs = require('./controllers/dogs');
+var db = require('./app/config/db');
+var api = {};
+
+api.dog = require('./app/routes/dog');
 var dbVerify = mongoose.connection;
 
 dbVerify.once('open',function(){
@@ -14,36 +18,47 @@ dbVerify.once('open',function(){
 
 mongoose.connect(db.url);
 
-http.createServer(function(req,res){
-	res.writeHead(200,{'Content-Type': 'text/plain; charset=utf-8;'});
+app.use(express.static(path.join(__dirname, 'public')));
+// override with different headers; last one takes precedence
+app.use(methodOverride('X-HTTP-Method'));          // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
+app.use(methodOverride('X-Method-Override'));      // IBM
+app.use(logger('dev'));      // IBM
 
-	var url = req.url;
+app.use('/api/dog',api.dog);
 
-	switch(url){
-		case '/retrieve':
-			dogs.retrieve(req,res);
-			break;
+app.listen(3000);
 
-		case '/create':
-			dogs.create(req,res);
-			break;
+// http.createServer(function(req,res){
+// 	res.writeHead(200,{'Content-Type': 'text/plain; charset=utf-8;'});
 
-		case '/update':
-			dogs.update(req,res);
-			break;
+// 	var url = req.url;
 
-		case '/remove':
-			dogs.remove(req,res);
-			break;
+// 	switch(url){
+// 		case '/retrieve':
+// 			dogs.retrieve(req,res);
+// 			break;
+
+// 		case '/create':
+// 			dogs.create(req,res);
+// 			break;
+
+// 		case '/update':
+// 			dogs.update(req,res);
+// 			break;
+
+// 		case '/remove':
+// 			dogs.remove(req,res);
+// 			break;
 			
-		case '/removeOne':
-			dogs.removeOne(req,res);
-			break;
-		default:
-			res.end('URL desconhecida! -> '+ url);
-			break;
-	}
+// 		case '/removeOne':
+// 			dogs.removeOne(req,res);
+// 			break;
+// 		default:
+// 			res.end('URL desconhecida! -> '+ url);
+// 			break;
+// 	}
 
-}).listen(3000);
+// }).listen(3000);
 
 console.log('Let the magic begins at port -> 3000');

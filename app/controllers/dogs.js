@@ -1,7 +1,7 @@
-var _dog = require('../model/dog'); 
+var Dog = require('../model/dog'); 
 
 module.exports = {
-	
+
 	create : function(req,res){
 		var dogLeo = {
 			name : 'Leonardo',
@@ -9,7 +9,7 @@ module.exports = {
 			brood : 'Bassehound',
 		};
 
-		var dogzin = new _dog(dogLeo);
+		var dogzin = new Dog(dogLeo);
 
 		dogzin.save(function (err, data) {
 		  if (err){
@@ -20,7 +20,7 @@ module.exports = {
 	},
 
 	retrieve : function(req,res){
-		_dog.find(function (err, data) {
+		Dog.find(function (err, data) {
 			if (err){
 				return res.end(err);
 			}; 
@@ -33,7 +33,7 @@ module.exports = {
 
 		var mod = {'name' : 'Lingui'};
 
-		_dog.update(query,mod,function (err, data) {
+		Dog.update(query,mod,function (err, data) {
 		  if (err){
 		  	return res.end(err);
 		  }; 
@@ -42,7 +42,7 @@ module.exports = {
 	},
 
 	remove : function(req,res){
-		_dog.remove(function (err, data) {
+		Dog.remove(function (err, data) {
 			if (err){
 				return res.end(err);
 			}; 
@@ -51,7 +51,7 @@ module.exports = {
 	},
 
 	removeOne : function(req,res){
-		_dog.find({'name':'Lingui'}).remove(function(err,data){
+		Dog.find({'name':'Lingui'}).remove(function(err,data){
 			res.end('Dog removido -> '+JSON.stringify(data));
 		}).exec();
 	}
