@@ -7,6 +7,7 @@ router.get('/', function(req, res) {
   _dog.retrieve(req,res);
 });
 
+/* POST home page. */
 router.post('/', function(req, res) {
   _dog.create(req,res);
 });
